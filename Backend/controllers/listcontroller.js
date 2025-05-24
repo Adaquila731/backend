@@ -12,7 +12,7 @@ exports.createListing = async (req, res) => {
 
     res.status(201).json(listing);
   } catch (err) {
-    res.status(500).json({ message: 'Failed to create listing', error: err.message });
+    res.status(500).json({ message: 'Failed to create Product', error: err.message });
   }
 };
 
@@ -21,17 +21,17 @@ exports.getListings = async (req, res) => {
     const listings = await Listing.find().populate('user', 'name location');
     res.json(listings);
   } catch (err) {
-    res.status(500).json({ message: 'Failed to fetch listings', error: err.message });
+    res.status(500).json({ message: 'Failed to fetch Products', error: err.message });
   }
 };
 
 exports.getListing = async (req, res) => {
   try {
     const listing = await Listing.findById(req.params.id).populate('user', 'name location');
-    if (!listing) return res.status(404).json({ message: 'Listing not found' });
+    if (!listing) return res.status(404).json({ message: 'Product not found' });
     res.json(listing);
   } catch (err) {
-    res.status(500).json({ message: 'Error fetching listing', error: err.message });
+    res.status(500).json({ message: 'Error fetching Product', error: err.message });
   }
 };
 
@@ -39,7 +39,7 @@ exports.updateListing = async (req, res) => {
   try {
     const listing = await Listing.findById(req.params.id);
 
-    if (!listing) return res.status(404).json({ message: 'Listing not found' });
+    if (!listing) return res.status(404).json({ message: 'Product not found' });
     if (!listing.user.equals(req.user._id)) {
       return res.status(403).json({ message: 'Permission denied' });
     }
@@ -54,21 +54,21 @@ exports.updateListing = async (req, res) => {
 
     res.json(listing);
   } catch (err) {
-    res.status(500).json({ message: 'Error updating listing', error: err.message });
+    res.status(500).json({ message: 'Error updating Product', error: err.message });
   }
 };
 
 exports.deleteListing = async (req, res) => {
   try {
     const listing = await Listing.findById(req.params.id);
-    if (!listing) return res.status(404).json({ message: 'Listing not found' });
+    if (!listing) return res.status(404).json({ message: 'Product not found' });
     if (!listing.user.equals(req.user._id)) {
       return res.status(403).json({ message: 'Permission denied' });
     }
 
-    await listing.remove();
-    res.json({ message: 'Listing deleted' });
+    await listing.deleteOne();
+    res.json({ message: 'Product deleted Successfully' });
   } catch (err) {
-    res.status(500).json({ message: 'Error deleting listing', error: err.message });
+    res.status(500).json({ message: 'Error deleting Product', error: err.message });
   }
 };
