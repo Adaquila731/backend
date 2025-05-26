@@ -35,6 +35,15 @@ exports.getListing = async (req, res) => {
   }
 };
 
+exports.getUserListings = async (req, res) => {
+  try {
+    const listings = await Listing.find({ user: req.params.userId });
+    res.json(listings);
+  } catch (err) {
+    res.status(500).json({ message: 'Error fetching user listings', error: err.message });
+  }
+};
+
 exports.updateListing = async (req, res) => {
   try {
     const listing = await Listing.findById(req.params.id);
