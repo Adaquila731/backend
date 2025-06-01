@@ -6,13 +6,15 @@ const {
   getListing,
   updateListing,
   deleteListing,
-  getUserListings
+  getUserListings,
+  getFeaturedListings
 } = require('../controllers/listcontroller');
 
 const { protect } = require('../middleware/auth');
 const { upload } = require('../config/cloudinary');
 
 // Public routes
+router.get('/featured', getFeaturedListings);
 router.get('/', getListings);
 router.get('/:id', getListing);
 router.get('/user/:userId', getUserListings);
