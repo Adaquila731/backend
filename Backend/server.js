@@ -4,7 +4,7 @@ const cors = require('cors');
 require('dotenv').config();
 const authRoutes = require('./routes/authroutes');
 const listingRoutes = require('./routes/listingroutes');
-const paymentRoutes = require('./routes/paymentroutes'); // Assuming you have a payment routes file
+const paymentRoutes = require('./routes/paymentroutes'); 
 
 const app = express();
 app.use(cors());
