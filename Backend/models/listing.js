@@ -7,6 +7,7 @@ const listingSchema = new mongoose.Schema({
   category: String,
   location: String,
   images: [String], 
+  featured: { type: Boolean, default: false },
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 }, { timestamps: true });
 

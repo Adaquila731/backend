@@ -81,3 +81,12 @@ exports.deleteListing = async (req, res) => {
     res.status(500).json({ message: 'Error deleting Product', error: err.message });
   }
 };
+
+exports.getFeaturedListings = async (req, res) => {
+  try {
+    const featured = await Listing.find({ featured: true });
+    res.json(featured);
+  } catch (err) {
+    res.status(500).json({ message: 'Error fetching featured ads', error: err.message });
+  }
+};
