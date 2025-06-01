@@ -32,7 +32,6 @@ router.post('/initialize', async (req, res) => {
 router.get('/verify', async (req, res) => {
   const { transaction_id, listingId } = req.query;
   try {
-    // Verify payment with Flutterwave
     const response = await axios.get(
       `https://api.flutterwave.com/v3/transactions/${transaction_id}/verify`,
       {
