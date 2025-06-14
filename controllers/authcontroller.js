@@ -66,7 +66,7 @@ exports.forgotPassword = async (req, res) => {
     await user.save();
 
     // Send token via email
-    const resetUrl = `https://adaquila.com/reset-passwordtoken=${resetToken}`;
+    const resetUrl = `https://adaquila.com/reset-password/?token=${resetToken}`;
     const emailMessage = `Hello ${user.firstName},\n\nWe received a request to reset your password for your Adaquila account.\n\nTo reset your password, please click the link below or copy and paste it into your browser:\n${resetUrl}\n\nIf you did not request a password reset, please ignore this email.\n\nThank you,\nThe Adaquila Team`;
     await sendEmail(user.email, 'Password Reset Request', emailMessage);
 
@@ -78,7 +78,12 @@ exports.forgotPassword = async (req, res) => {
 
 exports.resetPassword = async (req, res) => {
   try {
-    const { token, newPassword } = req.body;
+    // Get token from query string, newPassword from body
+    const { newPassword } = req.body;
+    const token = req.query.token;
+    if (!token || !newPassword) {
+      return res.status(400).json({ message: 'Token and new password are required' });
+    }
     const user = await User.findOne({
       resetPasswordToken: token,
       resetPasswordExpires: { $gt: Date.now() }
