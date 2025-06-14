@@ -10,10 +10,10 @@ const generateToken = (user) => {
 
 exports.register = async (req, res) => {
   try {
-    const { firstName, lastName, email, password, location, currency, phonenumber } = req.body;
+    const { firstName, lastName, email, password, location, phoneNumber } = req.body;
 
     if (!currency || !phonenumber) {
-      return res.status(400).json({ message: 'Currency and phonenumber are required' });
+      return res.status(400).json({ message: 'phoneNumber are required' });
     }
 
     const existing = await User.findOne({ email });
