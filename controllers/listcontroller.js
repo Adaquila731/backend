@@ -45,7 +45,7 @@ exports.getListing = async (req, res) => {
     if (!listing) return res.status(404).json({ message: 'Listing not found' });
 
     
-    let listingsCount = 0;
+    let listingsCount = 1;
     let user = null;
     if (listing.user) {
       listingsCount = await Listing.countDocuments({ user: listing.user._id });
