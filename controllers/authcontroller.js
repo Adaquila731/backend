@@ -81,6 +81,7 @@ exports.resetPassword = async (req, res) => {
     // Get token from query string, newPassword from body
     const { newPassword } = req.body;
     const token = req.query.token;
+    console.log('DEBUG resetPassword: token from query:', token);
     if (!token || !newPassword) {
       return res.status(400).json({ message: 'Token and new password are required' });
     }
@@ -88,6 +89,7 @@ exports.resetPassword = async (req, res) => {
       resetPasswordToken: token,
       resetPasswordExpires: { $gt: Date.now() }
     });
+    console.log('DEBUG resetPassword: user found:', user);
     if (!user) return res.status(400).json({ message: 'Invalid or expired token' });
 
     user.password = newPassword;
