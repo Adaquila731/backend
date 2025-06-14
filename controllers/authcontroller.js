@@ -12,14 +12,14 @@ exports.register = async (req, res) => {
   try {
     const { firstName, lastName, email, password, location, phoneNumber } = req.body;
 
-    if (!currency || !phonenumber) {
-      return res.status(400).json({ message: 'phoneNumber are required' });
+    if (!firstName || !lastName || !email || !password || !location || !phoneNumber) {
+      return res.status(400).json({ message: 'All fields are required' });
     }
 
     const existing = await User.findOne({ email });
     if (existing) return res.status(400).json({ message: 'Email already registered' });
 
-    const user = await User.create({ firstName, lastName, email, password, location, currency, phonenumber });
+    const user = await User.create({ firstName, lastName, email, password, location, phoneNumber });
     const token = generateToken(user);
     res.status(201).json({ user, token });
   } catch (err) {
