@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const { protect } = require('../middleware/auth');
 const { updateUser } = require('../controllers/authcontroller');
 const crypto = require('crypto');
+const sendEmail = require('../utilities/sendEmail');
 
 const generateToken = (user) => {
   return jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
@@ -59,15 +60,16 @@ exports.forgotPassword = async (req, res) => {
     const user = await User.findOne({ email });
     if (!user) return res.status(404).json({ message: 'User not found' });
 
-  
     const resetToken = crypto.randomBytes(32).toString('hex');
     user.resetPasswordToken = resetToken;
     user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
     await user.save();
 
-    // Send token via email (or SMS)
-    // await sendEmail(user.email, `Your reset token: ${resetToken}`);
-    res.json({ message: 'Reset token sent to email', resetToken }); 
+    // Send token via email
+    const resetUrl = `https://yourfrontend.com/reset-password?token=${resetToken}`;
+    await sendEmail(user.email, 'Password Reset', `Click the link to reset your password: ${resetUrl}\nOr use this token: ${resetToken}`);
+
+    res.json({ message: 'Reset token sent to email' });
   } catch (err) {
     res.status(500).json({ message: 'Error sending reset token', error: err.message });
   }
