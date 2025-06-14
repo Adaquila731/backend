@@ -41,12 +41,17 @@ exports.getListings = async (req, res) => {
 exports.getListing = async (req, res) => {
   try {
     const listing = await Listing.findById(req.params.id)
-      .populate('user', 'name username phonenumber createdAt rating');
+      .populate('user', 'firstName lastName phoneNumber username createdAt rating');
     if (!listing) return res.status(404).json({ message: 'Listing not found' });
 
-    const listingsCount = await Listing.countDocuments({ user: listing.user._id });
-    const user = listing.user.toObject();
-    user.listingsCount = listingsCount;
+    
+    let listingsCount = 0;
+    let user = null;
+    if (listing.user) {
+      listingsCount = await Listing.countDocuments({ user: listing.user._id });
+      user = listing.user.toObject();
+      user.listingsCount = listingsCount;
+    }
 
     res.json({ ...listing.toObject(), user });
   } catch (err) {
